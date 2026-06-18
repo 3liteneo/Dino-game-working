@@ -1,47 +1,147 @@
+const game = document.getElementById("game");
 const dino = document.getElementById("dino");
-const cactus = document.getElementById("cactus");
 const scoreText = document.getElementById("score");
+const highscoreText = document.getElementById("highscore");
+const gameOverScreen = document.getElementById("gameOver");
+
+let jumping = false;
+let velocity = 0;
+let gravity = 0.8;
 
 let score = 0;
+let speed = 6;
 let gameOver = false;
 
-document.addEventListener("keydown", (e) => {
-    if ((e.code === "Space" || e.code === "ArrowUp") &&
-        !dino.classList.contains("jump")) {
+let highscore =
+    localStorage.getItem("pixelDinoHighscore") || 0;
 
-        dino.classList.add("jump");
+highscoreText.textContent =
+    "Best: " + highscore;
 
-        setTimeout(() => {
-            dino.classList.remove("jump");
-        }, 500);
-    }
+let dinoY = 20;
+
+function jump(){
+
+    if(jumping || gameOver) return;
+
+    jumping = true;
+    velocity = 14;
+}
+
+document.addEventListener("keydown",e=>{
+    if(e.code==="Space" || e.code==="ArrowUp")
+        jump();
 });
 
-const scoreInterval = setInterval(() => {
-    if (!gameOver) {
-        score++;
-        scoreText.textContent = score;
+document.addEventListener("touchstart",jump);
+
+function updateDino(){
+
+    velocity -= gravity;
+    dinoY += velocity;
+
+    if(dinoY <= 20){
+        dinoY = 20;
+        velocity = 0;
+        jumping = false;
     }
-}, 100);
 
-const collisionCheck = setInterval(() => {
-    const dinoBottom =
-        parseInt(window.getComputedStyle(dino).getPropertyValue("bottom"));
-
-    const cactusLeft =
-        cactus.getBoundingClientRect().left -
-        document.getElementById("game").getBoundingClientRect().left;
-
-    if (cactusLeft < 90 && cactusLeft > 20 && dinoBottom < 60) {
-        gameOver = true;
-        cactus.style.animationPlayState = "paused";
-        alert(`Game Over! Score: ${score}`);
-    }
-}, 10);
-
-function restartGame() {
-    score = 0;
-    gameOver = false;
-    scoreText.textContent = 0;
-    cactus.style.animationPlayState = "running";
+    dino.style.bottom = dinoY + "px";
 }
+
+function createObstacle(){
+
+    if(gameOver) return;
+
+    const obstacle = document.createElement("div");
+    obstacle.className = "obstacle";
+
+    const height =
+        Math.random() > .5 ? 50 : 70;
+
+    obstacle.style.height = height+"px";
+    obstacle.style.left = "900px";
+
+    game.appendChild(obstacle);
+
+    let x = 900;
+
+    function move(){
+
+        if(gameOver){
+            obstacle.remove();
+            return;
+        }
+
+        x -= speed;
+        obstacle.style.left = x+"px";
+
+        const dinoRect =
+            dino.getBoundingClientRect();
+
+        const obstacleRect =
+            obstacle.getBoundingClientRect();
+
+        if(
+            dinoRect.left < obstacleRect.right &&
+            dinoRect.right > obstacleRect.left &&
+            dinoRect.bottom > obstacleRect.top
+        ){
+            endGame();
+        }
+
+        if(x < -50){
+            obstacle.remove();
+            score++;
+
+            scoreText.textContent = score;
+
+            if(score > highscore){
+                highscore = score;
+
+                localStorage.setItem(
+                    "pixelDinoHighscore",
+                    highscore
+                );
+
+                highscoreText.textContent =
+                    "Best: " + highscore;
+            }
+        }else{
+            requestAnimationFrame(move);
+        }
+    }
+
+    move();
+
+    const delay =
+        Math.random()*1200 + 800;
+
+    setTimeout(createObstacle, delay);
+}
+
+function endGame(){
+
+    gameOver = true;
+    gameOverScreen.style.display = "flex";
+}
+
+function restart(){
+
+    location.reload();
+}
+
+function loop(){
+
+    if(!gameOver){
+
+        updateDino();
+
+        speed += 0.0005;
+
+        requestAnimationFrame(loop);
+    }
+}
+
+createObstacle();
+loop();
