@@ -1,0 +1,51 @@
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+#game {
+    width: 800px;
+    height: 250px;
+    border: 2px solid black;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+}
+
+#dino {
+    width: 50px;
+    height: 50px;
+    background: green;
+    position: absolute;
+    bottom: 0;
+    left: 50px;
+}
+
+#cactus {
+    width: 25px;
+    height: 60px;
+    background: darkgreen;
+    position: absolute;
+    bottom: 0;
+    right: -25px;
+    animation: move 1.5s linear infinite;
+}
+
+@keyframes move {
+    from {
+        right: -25px;
+    }
+    to {
+        right: 100%;
+    }
+}
+
+.jump {
+    animation: jump 0.5s ease;
+}
+
+@keyframes jump {
+    0% { bottom: 0; }
+    50% { bottom: 120px; }
+    100% { bottom: 0; }
+}
