@@ -3,25 +3,54 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
-    background:#f7f7f7;
+    min-height:100vh;
+    background:linear-gradient(#0b1225,#111827);
     font-family:monospace;
 }
 
 #game{
     width:900px;
-    height:300px;
-    border:4px solid #222;
+    height:350px;
     position:relative;
     overflow:hidden;
-    background:white;
+    border-radius:20px;
+    border:4px solid #1e293b;
+    background:linear-gradient(#f8edd2,#f4ddb5);
+    box-shadow:0 0 40px rgba(0,0,0,.4);
+}
+
+/* Sun */
+#game::before{
+    content:"";
+    position:absolute;
+    right:100px;
+    top:60px;
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    background:rgba(255,255,255,.6);
+}
+
+/* Ground */
+#game::after{
+    content:"";
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:60px;
+    background:#d9a15f;
+    border-top:4px solid #8b5e34;
 }
 
 #score,
 #highscore{
     position:absolute;
-    top:10px;
+    top:15px;
     font-size:24px;
+    font-weight:bold;
+    color:#111827;
+    z-index:10;
 }
 
 #score{
@@ -34,36 +63,72 @@ body{
 
 #dino{
     position:absolute;
-    bottom:20px;
-    left:80px;
-    width:40px;
-    height:40px;
+    bottom:60px;
+    left:100px;
+    width:50px;
+    height:50px;
+    image-rendering:pixelated;
+    background:#111827;
 
-    background:
-    linear-gradient(#000 0 0) 0 0/100% 100%;
-
-    image-rendering: pixelated;
+    clip-path: polygon(
+        0% 20%,
+        40% 20%,
+        40% 0%,
+        80% 0%,
+        100% 20%,
+        100% 60%,
+        70% 60%,
+        70% 100%,
+        55% 100%,
+        55% 70%,
+        35% 70%,
+        35% 100%,
+        20% 100%,
+        20% 60%,
+        0% 60%
+    );
 }
 
 .obstacle{
     position:absolute;
-    bottom:20px;
+    bottom:60px;
     width:25px;
-    background:#111;
+    background:#4f9c2c;
+    border:2px solid #2e6b16;
 }
 
 #gameOver{
     display:none;
     position:absolute;
     inset:0;
-    background:rgba(255,255,255,.95);
+    background:rgba(10,15,30,.85);
+    color:white;
     justify-content:center;
     align-items:center;
     flex-direction:column;
+    z-index:50;
+}
+
+#gameOver h1{
+    font-size:48px;
+    margin-bottom:20px;
 }
 
 button{
-    padding:10px 20px;
-    font-size:18px;
+    padding:12px 24px;
+    border:none;
+    border-radius:10px;
+    background:#fbbf24;
+    font-size:20px;
     cursor:pointer;
+}
+
+/* Clouds */
+.cloud{
+    position:absolute;
+    width:70px;
+    height:25px;
+    background:white;
+    opacity:.6;
+    border-radius:30px;
 }
