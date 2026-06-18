@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Dino Runner</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pixel Dino Runner</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Dino Runner</h1>
 
-    <div id="game">
-        <div id="dino"></div>
-        <div id="cactus"></div>
+<div id="game">
+    <div id="score">0</div>
+    <div id="highscore">Best: 0</div>
+
+    <div id="dino"></div>
+
+    <div id="gameOver">
+        <h1>GAME OVER</h1>
+        <button onclick="restart()">Restart</button>
     </div>
+</div>
 
-    <p>Score: <span id="score">0</span></p>
-    <button onclick="restartGame()">Restart</button>
-
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
-<!-- update -->
